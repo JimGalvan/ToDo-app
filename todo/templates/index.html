@@ -8,16 +8,22 @@
     </div>
     {% else %}
     <div class="w-full max-w-xs mx-auto mt-20">
-        <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
-        <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            {% csrf_token %}
-            {{ form.as_p }} <!-- Change this line -->
-            <div class="flex items-center justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                    Login
-                </button>
-            </div>
-        </form>
+        <h1 class="text-2xl font-bold mb-6 text-center">Welcome to Our Site!</h1>
+        <p class="mb-4 text-center">Please register or log in to continue.</p>
+        {% if user.is_authenticated %}
+        <p class="text-center">You are logged in as {{ user.username }}.</p>
+        {% else %}
+        <div class="flex items-center justify-center">
+            <a href="{% url 'register' %}"
+               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Register
+            </a>
+            <a href="{% url 'login' %}"
+               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-4">
+                Login
+            </a>
+        </div>
+        {% endif %}
     </div>
     {% endif %}
 </div>

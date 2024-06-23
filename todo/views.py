@@ -13,9 +13,9 @@ def index(request):
     return render(request, 'index.html', {'todos': todos, 'completed_todos': None})
 
 
+@login_required
 def todo_lists(request):
     items = request.user.todolists.all()
-    print(items)
     return render(request, 'todo/todo-lists.html', {'todo_lists': items})
 
 
@@ -44,29 +44,23 @@ def set_main_todo_list(request, list_id):
     return redirect('todo_list_view')
 
 
-# class TodoLists(LoginRequiredMixin, ListView):
-#     template_name = 'todo/todo-lists.html'
-#     model = ToDoList
-#     context_object_name = 'todo_lists'
-#
-#     def get_queryset(self):
-#         user = self.request.user
-#         return user.todolists.all()
-
-
+@login_required
 def todo_task_list(request):
     todos = ToDoTask.objects.all()
     return render(request, 'index.html', {'todos': todos})
 
 
-def add_todo(request):
-    if request.method == 'POST':
-        text = request.POST.get('text')
-        if text:
-            ToDoTask.objects.create(text=text)
+@login_required
+def add_todo(request, list_id):
+    text = request.POST.get('todo')
+    if text:
+        user = request.user
+        todo_list = get_object_or_404(ToDoList, id=list_id, user=user)
+        todo_list.tasks.create(list=list_id, title=text)
     return redirect('index')
 
 
+@login_required
 def toggle_todo(request, todo_id):
     todo = ToDoTask.objects.get(id=todo_id)
     todo.completed = not todo.completed
@@ -88,15 +82,13 @@ class RegisterView(FormView):
         return super().form_valid(form)
 
 
+@login_required
 def profile_view(request):
     return render(request, 'user/profile.html')
 
-# def todo_list_view(request):
-#     # lists = ToDoList.objects.filter(user=request.user)
-#     return render(request, 'todo/todo-list-detail.html', {'lists': None})
-#
-#
-# def todo_task_view(request, list_id):
-#     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
-#     tasks = todo_list.tasks.all()
-#     return render(request, 'todo/task.html', {'list': todo_list, 'tasks': tasks})
+
+@login_required
+def todo_list_tasks(request, list_id):
+    todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
+    tasks = todo_list.tasks.all()
+    return render(request, 'todo/todo-list-tasks.html', {'list': todo_list, 'tasks': tasks, 'todo_list': todo_list})

@@ -7,7 +7,7 @@
         <h5 class="text-lg leading-6 font-medium text-gray-900">{{ todo_list.name }}</h5>
     </div>
     <div class="px-4 py-5 sm:px-6">
-        <a href="#"
+        <a href="{% url 'todo_list_tasks' todo_list.pk %}"
            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-500 focus:outline-none focus:ring focus:ring-indigo-700 active:bg-indigo-700 transition">
             View Tasks
         </a>
