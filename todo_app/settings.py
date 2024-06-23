@@ -36,9 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todo',
     'widget_tweaks',
-    'rest_framework',
+    'todo.apps.SignalsConfig',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +80,7 @@ DATABASES = {
         'USER': 'jimmy',
         'PASSWORD': 'guindowsCE95@',
         'HOST': 'localhost',  # Set to empty string for localhost.
-        'PORT': '5432',       # Set to empty string for default.
+        'PORT': '5432',  # Set to empty string for default.
     }
 }
 

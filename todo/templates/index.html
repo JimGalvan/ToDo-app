@@ -1,5 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'todo/todo-lists.html' %}
+<div class="container mx-auto px-4">
+    {% if user.is_authenticated %}
+    <div class="text-center py-8">
+        <h1 class="text-4xl font-bold">Welcome, {{ user.username }}</h1>
+    </div>
+    {% else %}
+    <div class="w-full max-w-xs mx-auto mt-20">
+        <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
+        <form method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            {% csrf_token %}
+            {{ form.as_p }} <!-- Change this line -->
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Login
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
