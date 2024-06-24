@@ -17,18 +17,8 @@
         <button id="completed-tab" class="flex-grow px-4 py-2 bg-gray-300 text-gray-800 rounded-r-lg">Completed</button>
     </div>
 
-    <div id="todos-section">
-        <ul id="todo-list" class="list-disc list-inside mb-4">
-            <!-- Todos will be added here -->
-        </ul>
-    </div>
-
-    <!-- Completed List -->
-    <div id="completed-section" class="hidden">
-        <ul id="completed-list" class="list-disc list-inside">
-            <!-- Completed todos will be added here -->
-        </ul>
-    </div>
+    <!-- Todo Tasks -->
+    {% include 'todo/partials/todo-tasks.html' %}
 
     <div x-cloak x-show="addTodoTaskDialogOpen">
         {% include 'todo/partials/add_todo_task_modal.html' %}

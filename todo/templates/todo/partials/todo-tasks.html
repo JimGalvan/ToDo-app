@@ -1,0 +1,26 @@
+<div id="todos-section">
+    <ul id="todo-list" class="list-disc list-inside mb-4">
+        {% for task in tasks %}
+        {% if task.completed %}
+        <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+            <button class="px-2 py-1 ml-2 rounded dark:bg-blue-400 bg-blue-500 text-white"
+                    hx-post="{% url 'toggle_todo' task.pk %}"
+                    hx-swap="outerHTML"
+                    hx-confirm="Are you sure you wish to complete this task?">
+                Complete
+            </button>
+            <span class="line-through">{{ task.title }}</span>
+        </li>
+        {% else %}
+        <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+            <button class="px-2 py-1 ml-2 rounded dark:bg-blue-400 bg-blue-500 text-white"
+                    hx-swap="outerHTML"
+                    hx-confirm="Are you sure you wish to complete this task?">
+                Complete
+            </button>
+            <span>{{ task.title }}</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</div>

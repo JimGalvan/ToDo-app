@@ -53,11 +53,18 @@ def todo_task_list(request):
 @login_required
 def add_todo(request, list_id):
     text = request.POST.get('todo')
+    tasks = None
+    todo_added = False
+    todo_list = None
     if text:
         user = request.user
         todo_list = get_object_or_404(ToDoList, id=list_id, user=user)
         todo_list.tasks.create(list=list_id, title=text)
-    return redirect('index')
+        tasks = todo_list.tasks.all()
+        todo_added = True
+
+    return render(request, 'todo/partials/todo-tasks.html',
+                  {'tasks': tasks, 'todo_added': todo_added, 'todo_list': todo_list})
 
 
 @login_required

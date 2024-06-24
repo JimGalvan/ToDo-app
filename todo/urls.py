@@ -13,17 +13,17 @@ urlpatterns = [
 ]
 
 todo_list_urlpatterns = [
+    path('todo-lists/', views.todo_lists, name='todo_lists'),
     path('todo-lists/<int:list_id>/hide/', hide_todo_list, name='hide_todo_list'),
     path('todo-lists/<int:list_id>/add_todo/', views.add_todo, name='add_todo'),
     path('todo-lists/<int:list_id>/todo-tasks/', views.todo_list_tasks, name='todo_list_tasks'),
     path('todo-lists/<int:list_id>/set-main/', set_main_todo_list, name='set_main_todo_list'),
-    path('todo-lists/', views.todo_lists, name='todo_lists'),
 ]
 
 urlpatterns += todo_list_urlpatterns
 
 todo_task_urlpatterns = [
-    path('toggle/<int:todo_id>/', views.toggle_todo, name='toggle_todo'),
+    path('todo-task/<int:todo_id>/toggle/', views.toggle_todo, name='toggle_todo'),
 ]
 
 urlpatterns += todo_list_urlpatterns

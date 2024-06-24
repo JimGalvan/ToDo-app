@@ -4,8 +4,12 @@
         <form hx-post="{% url 'add_todo' todo_list.pk %}" hx-target="#todo-list">
             {% csrf_token %}
             <input name="todo" type="text" id="new-todo" class="border p-2 w-full mb-2" placeholder="Todo">
-            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Add</button>
-            <button id="close-modal" @click="addTodoTaskDialogOpen = false"
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded"
+                    @click="addTodoTaskDialogOpen = false">
+                Add
+            </button>
+            <!-- close button type is needed to avoid acting as a submit button -->
+            <button type="button" id="close-modal" @click="addTodoTaskDialogOpen = false"
                     class="px-4 py-2 bg-red-500 text-white rounded">
                 Close
             </button>
