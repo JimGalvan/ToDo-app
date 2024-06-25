@@ -23,7 +23,7 @@ todo_list_urlpatterns = [
 urlpatterns += todo_list_urlpatterns
 
 todo_task_urlpatterns = [
-    path('todo-task/<int:todo_id>/toggle/', views.toggle_todo, name='toggle_todo'),
+    path('todo-lists/<int:list_id>/todo-task/<int:todo_id>/toggle/', views.toggle_todo, name='toggle_todo'),
 ]
 
-urlpatterns += todo_list_urlpatterns
+urlpatterns += todo_task_urlpatterns

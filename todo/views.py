@@ -53,26 +53,59 @@ def todo_task_list(request):
 @login_required
 def add_todo(request, list_id):
     text = request.POST.get('todo')
-    tasks = None
+    todos = None
     todo_added = False
     todo_list = None
     if text:
         user = request.user
         todo_list = get_object_or_404(ToDoList, id=list_id, user=user)
         todo_list.tasks.create(list=list_id, title=text)
-        tasks = todo_list.tasks.all()
+        todos = todo_list.tasks.all()
         todo_added = True
 
-    return render(request, 'todo/partials/todo-tasks.html',
-                  {'tasks': tasks, 'todo_added': todo_added, 'todo_list': todo_list})
+    completed_status_list, todo_status_list = sort_todos(todos)
+
+    context = {
+        'todo_status_list': todo_status_list,
+        'completed_status_list': completed_status_list,
+        'todo_list': todo_list,
+        'list': 'todo_list'
+    }
+
+    return render(request, 'todo/partials/todo-tasks.html', context)
 
 
 @login_required
-def toggle_todo(request, todo_id):
-    todo = ToDoTask.objects.get(id=todo_id)
-    todo.completed = not todo.completed
-    todo.save()
-    return redirect('index')
+def toggle_todo(request, list_id, todo_id):
+    user = request.user
+    todo_list = user.todolists.get(id=list_id)
+    todo = todo_list.tasks.get(id=todo_id)
+
+    if todo.status == ToDoTask.TODO:
+        todo.status = ToDoTask.COMPLETE
+        todo.save()
+    else:
+        todo.status = ToDoTask.TODO
+        todo.save()
+
+    todos = todo_list.tasks.all()
+    todo_list = todo_list
+
+    completed_status_list, todo_status_list = sort_todos(todos)
+
+    context = {
+        'todo_status_list': todo_status_list,
+        'completed_status_list': completed_status_list,
+        'todo_list': todo_list
+    }
+
+    return render(request, 'todo/partials/todo-tasks.html', context)
+
+
+def sort_todos(todos):
+    todo_status_list = [task for task in todos if task.status == 'TODO']
+    completed_status_list = [task for task in todos if task.status == 'COMPLETE']
+    return completed_status_list, todo_status_list
 
 
 class Login(LoginView):
@@ -97,5 +130,15 @@ def profile_view(request):
 @login_required
 def todo_list_tasks(request, list_id):
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
-    tasks = todo_list.tasks.all()
-    return render(request, 'todo/todo-list-tasks.html', {'list': todo_list, 'tasks': tasks, 'todo_list': todo_list})
+    todos = todo_list.tasks.all()
+
+    completed_status_list, todo_status_list = sort_todos(todos)
+
+    context = {
+        'todo_status_list': todo_status_list,
+        'completed_status_list': completed_status_list,
+        'todo_list': todo_list,
+        'list': 'todo_list'
+    }
+
+    return render(request, 'todo/todo-list-tasks.html', context)
