@@ -1,37 +1,33 @@
-{% for char in hello %}
-    {{ char }}
-{% debug %}
-{% endfor %}
 <div id="todos">
-
-    <div x-cloak id="todos-section" x-show="activeTab === 'todos'">
-        <ul id="todo-list" class="list-disc list-inside mb-4">
+    <divs x-cloak x-show="activeTab === 'todos'">
+        <ul class="list-disc list-inside mb-4">
             {% for task in todo_status_list %}
-            <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
-                <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
-                    {% csrf_token %}
-                    <button type="submit" class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
-                        Complete
-                    </button>
-                </form>
-                <span>{{ task.title }}</span>
-            </li>
+                <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+                    <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
+                        {% csrf_token %}
+                        <button type="submit" class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
+                            Complete
+                        </button>
+                    </form>
+                    <span>{{ task.title }}</span>
+                </li>
             {% endfor %}
         </ul>
-    </div>
+    </divs>
 
-    <div x-cloak id="completed-section" x-show="activeTab === 'completed'">
-        <ul id="completed-list" class="list-disc list-inside mb-4">
+    <div x-cloak x-show="activeTab === 'completed'">
+        <ul class="list-disc list-inside mb-4">
             {% for task in completed_status_list %}
-            <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
-                <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
-                    {% csrf_token %}
-                    <button type="submit" class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white">
-                        Uncomplete
-                    </button>
-                </form>
-                <span>{{ task.title }}</span>
-            </li>
+                <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+                    <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white">
+                            Uncomplete
+                        </button>
+                    </form>
+                    <span>{{ task.title }}</span>
+                </li>
             {% endfor %}
         </ul>
     </div>
