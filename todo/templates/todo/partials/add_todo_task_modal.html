@@ -5,7 +5,7 @@
             {% csrf_token %}
             <input name="todo" type="text" id="new-todo" class="border p-2 w-full mb-2" placeholder="Todo">
             <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded"
-                    @click="addTodoTaskDialogOpen = false">
+                    @click="addTodoTaskDialogOpen = false; activeTab = 'todos'">
                 Add
             </button>
             <!-- close button type is needed to avoid acting as a submit button -->
