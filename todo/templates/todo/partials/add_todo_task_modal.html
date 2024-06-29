@@ -1,7 +1,7 @@
 <div id="modal" class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-4 rounded-lg shadow-lg max-w-md mx-auto sm:m-4">
         <h2 class="text-xl font-bold mb-4">Add a new todo</h2>
-        <form hx-post="{% url 'add_todo' todo_list.pk %}" hx-target="#todos">
+        <form hx-post="{% url 'add_todo' todo_list.pk %}" hx-target="#todos" hx-on--after-request="this.reset()">
             {% csrf_token %}
             <input name="todo" type="text" id="new-todo" class="border p-2 w-full mb-2" placeholder="Todo">
             <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded"
