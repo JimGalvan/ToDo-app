@@ -9,7 +9,15 @@
                         @touchstart="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
                         @mouseup="clearTimeout(timer)"
                         @touchend="clearTimeout(timer)"
-                        :class="{'shadow-lg': selected, 'grayscale': selected, 'bg-gray-100': selected, 'dark:bg-gray-700': selected}"
+                        :class="{
+                        'shadow-lg': selected,
+                        'grayscale': selected,
+                        'bg-gray-100': selected,
+                        'dark:bg-gray-700': selected,
+                        'transition-colors': true,
+                        'duration-500': true,
+                        'ease-in-out': true
+                        }"
                         class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
                         <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
                             {% csrf_token %}
