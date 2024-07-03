@@ -2,35 +2,34 @@
 
 {% block content %}
 
-<div x-cloak x-data="{ addTodoTaskDialogOpen : false, activeTab: 'todos' }">
+    <div x-cloak x-data="{ addTodoTaskDialogOpen : false, activeTab: 'todos' }">
 
-    <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold mb-4">My Todo List</h1>
-        <button @click="addTodoTaskDialogOpen = ! addTodoTaskDialogOpen" id="open-modal"
-                class="px-4 py-2 bg-green-500 text-white">
-            Add Todo
-        </button>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold mb-4">My Todo List</h1>
+            <button @click="addTodoTaskDialogOpen = ! addTodoTaskDialogOpen" id="open-modal"
+                    class="px-4 py-2 bg-green-500 text-white">
+                Add Todo
+            </button>
+        </div>
+
+        <div class="flex mb-4">
+            <button @click="activeTab = 'todos'" id="todos-tab"
+                    class="flex-grow px-4 py-2 rounded-l-lg"
+                    :class="{'bg-blue-500 text-white': activeTab === 'todos', 'bg-gray-300 text-gray-800': activeTab !== 'todos'}">
+                Todos
+            </button>
+            <button @click="activeTab = 'completed'" id="completed-tab"
+                    class="flex-grow px-4 py-2 rounded-r-lg"
+                    :class="{'bg-blue-500 text-white': activeTab === 'completed', 'bg-gray-300 text-gray-800': activeTab !== 'completed'}">
+                Completed
+            </button>
+        </div>
+
+        <!-- Todo Tasks -->
+        {% include 'todo/partials/todo-tasks.html' %}
+
+        <div x-cloak x-show="addTodoTaskDialogOpen">
+            {% include 'todo/partials/add_todo_task_modal.html' %}
+        </div>
     </div>
-
-    <div class="flex mb-4">
-        <button @click="activeTab = 'todos'" id="todos-tab"
-                class="flex-grow px-4 py-2 rounded-l-lg"
-                :class="{'bg-blue-500 text-white': activeTab === 'todos', 'bg-gray-300 text-gray-800': activeTab !== 'todos'}">
-            Todos
-        </button>
-        <button @click="activeTab = 'completed'" id="completed-tab"
-                class="flex-grow px-4 py-2 rounded-r-lg"
-                :class="{'bg-blue-500 text-white': activeTab === 'completed', 'bg-gray-300 text-gray-800': activeTab !== 'completed'}">
-            Completed
-        </button>
-    </div>
-
-    <!-- Todo Tasks -->
-    {% include 'todo/partials/todo-tasks.html' %}
-
-    <div x-cloak x-show="addTodoTaskDialogOpen">
-        {% include 'todo/partials/add_todo_task_modal.html' %}
-    </div>
-</div>
-
 {% endblock %}

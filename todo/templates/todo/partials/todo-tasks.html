@@ -1,9 +1,9 @@
-<div id="todos" x-data="{showEditModal: false}">
-    <div @click.away="showEditModal = false">
+<div id="todos">
+    <div>
         <div x-cloak x-show="activeTab === 'todos'">
             <ul class="list-disc list-inside mb-4">
                 {% for task in todo_status_list %}
-                    <li x-data="{ timer: null, selected: false }"
+                    <li x-data="{ timer: null, selected: false, showEditModal: false }"
                         @click.away="selected = false"
                         @mousedown="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
                         @touchstart="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
@@ -15,7 +15,7 @@
                         'bg-gray-100': selected,
                         'dark:bg-gray-700': selected,
                         'transition-colors': true,
-                        'duration-500': true,
+                        'duration-300': true,
                         'ease-in-out': true
                         }"
                         class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
@@ -27,6 +27,9 @@
                             </button>
                         </form>
                         <span>{{ task.title }}</span>
+                        <div x-cloak x-show="showEditModal">
+                            {% include 'todo/partials/edit_todo_task_modal.html' %}
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -49,5 +52,4 @@
             {% endfor %}
         </ul>
     </div>
-</div>
 </div>
