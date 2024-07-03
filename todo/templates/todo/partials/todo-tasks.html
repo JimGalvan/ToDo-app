@@ -1,19 +1,29 @@
-<div id="todos">
-    <divs x-cloak x-show="activeTab === 'todos'">
-        <ul class="list-disc list-inside mb-4">
-            {% for task in todo_status_list %}
-                <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
-                    <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
-                        {% csrf_token %}
-                        <button type="submit" class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
-                            Complete
-                        </button>
-                    </form>
-                    <span>{{ task.title }}</span>
-                </li>
-            {% endfor %}
-        </ul>
-    </divs>
+<div id="todos" x-data="{showEditModal: false}">
+    <div @click.away="showEditModal = false">
+        <div x-cloak x-show="activeTab === 'todos'">
+            <ul class="list-disc list-inside mb-4">
+                {% for task in todo_status_list %}
+                    <li x-data="{ timer: null, selected: false }"
+                        @click.away="selected = false"
+                        @mousedown="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
+                        @touchstart="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
+                        @mouseup="clearTimeout(timer)"
+                        @touchend="clearTimeout(timer)"
+                        :class="{'shadow-lg': selected, 'grayscale': selected, 'bg-gray-100': selected, 'dark:bg-gray-700': selected}"
+                        class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+                        <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
+                                Complete
+                            </button>
+                        </form>
+                        <span>{{ task.title }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
     <div x-cloak x-show="activeTab === 'completed'">
         <ul class="list-disc list-inside mb-4">
@@ -31,4 +41,5 @@
             {% endfor %}
         </ul>
     </div>
+</div>
 </div>
