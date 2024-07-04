@@ -98,12 +98,6 @@ def toggle_todo(request, list_id, todo_id):
     return render(request, 'todo/partials/todo-tasks.html', context)
 
 
-def sort_todos(todos):
-    todo_status_list = [task for task in todos if task.status == 'TODO']
-    completed_status_list = [task for task in todos if task.status == 'COMPLETE']
-    return completed_status_list, todo_status_list
-
-
 class Login(LoginView):
     template_name = 'registration/login.html'
 

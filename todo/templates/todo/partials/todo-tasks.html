@@ -3,9 +3,11 @@
         <div x-cloak x-show="activeTab === 'todos'">
             <ul class="list-disc list-inside mb-4">
                 {% for task in todo_list_items %}
-                    {% if task.status == "TODO" %}
-                        {% include 'todo/partials/todo.html' %}
-                    {% endif %}
+                {% if task.status == "TODO" %}
+                {% include 'todo/partials/todo.html' %}
+                {% endif %}
+                {% empty %}
+                <span class="flex items-center justify-center text-gray-500 bg-gray-100 p-2 rounded">No tasks to do. Enjoy your day!</span>
                 {% endfor %}
             </ul>
         </div>
@@ -14,9 +16,11 @@
     <div x-cloak x-show="activeTab === 'completed'">
         <ul class="list-disc list-inside mb-4">
             {% for task in todo_list_items %}
-                {% if task.status == "COMPLETE" %}
-                    {% include 'todo/partials/todo.html' %}
-                {% endif %}
+            {% if task.status == "COMPLETE" %}
+            {% include 'todo/partials/todo.html' %}
+            {% endif %}
+            {% empty %}
+            <span class="flex items-center justify-center text-gray-500 bg-gray-100 p-2 rounded">No completed tasks yet.</span>
             {% endfor %}
         </ul>
     </div>
