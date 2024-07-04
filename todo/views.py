@@ -171,6 +171,9 @@ def edit_todo(request, list_id, todo_id):
     todo.title = text
     todo.save(update_sort_timestamp=False)
 
+    # sort by updated_at field in descending order
+    todos = todos.order_by('-sort_timestamp')
+
     context = {
         'todo_list_items': todos,
         'todo_list': todo_list,
