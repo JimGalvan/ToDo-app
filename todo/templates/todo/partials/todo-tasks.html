@@ -1,4 +1,4 @@
-<div id="todos">
+<div id="todos" x-data="selectedTodo: null">
     <div>
         <div x-cloak x-show="activeTab === 'todos'">
             <ul class="list-disc list-inside mb-4">
@@ -10,16 +10,18 @@
                             @touchstart="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
                             @mouseup="clearTimeout(timer)"
                             @touchend="clearTimeout(timer)"
+                            class="flex justify-between border p-2 my-2 list-none dark:border-gray-600"
                             :class="{
-                        'shadow-lg': selected,
-                        'grayscale': selected,
-                        'bg-gray-100': selected,
-                        'dark:bg-gray-700': selected,
-                        'transition-colors': true,
-                        'duration-300': true,
-                        'ease-in-out': true
-                        }"
-                            class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+                            'shadow-lg': selected,
+                            'grayscale': selected,
+                            'bg-gray-100': selected,
+                            'dark:bg-gray-700': selected,
+                            'transition-colors': true,
+                            'duration-300': true,
+                            'ease-in-out': true,
+                            'display: block;': selected
+                            }"
+                        >
                             <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}"
                                   hx-target="#todos">
                                 {% csrf_token %}
@@ -28,8 +30,10 @@
                                     Complete
                                 </button>
                             </form>
-                            <span>{{ task.title }}</span>
-                            <div x-cloak x-show="selected">
+                            <span>
+                                {{ task.title }}
+                            </span>
+                            <div x-cloak x-show="selected" style="position: fixed;">
                                 {% include 'todo/partials/edit_todo_task_modal.html' %}
                             </div>
                         </li>
