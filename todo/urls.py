@@ -24,6 +24,8 @@ urlpatterns += todo_list_urlpatterns
 
 todo_task_urlpatterns = [
     path('todo-lists/<int:list_id>/todo-task/<int:todo_id>/toggle/', views.toggle_todo, name='toggle_todo'),
+    path('todo-lists/<int:list_id>/todo-task/<int:todo_id>/delete/', views.delete_todo, name='delete_todo'),
+    path('todo-lists/<int:list_id>/todo-task/<int:todo_id>/edit/', views.edit_todo, name='edit_todo'),
 ]
 
 urlpatterns += todo_task_urlpatterns

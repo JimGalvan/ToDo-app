@@ -2,14 +2,15 @@
     <div>
         <div x-cloak x-show="activeTab === 'todos'">
             <ul class="list-disc list-inside mb-4">
-                {% for task in todo_status_list %}
-                    <li x-data="{ timer: null, selected: false, showEditModal: false }"
-                        @click.away="selected = false"
-                        @mousedown="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
-                        @touchstart="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
-                        @mouseup="clearTimeout(timer)"
-                        @touchend="clearTimeout(timer)"
-                        :class="{
+                {% for task in todo_list_items %}
+                    {% if task.status == "TODO" %}
+                        <li x-data="{ timer: null, selected: false, showEditModal: false }"
+                            @click.away="selected = false"
+                            @mousedown="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
+                            @touchstart="timer = setTimeout(() => { showEditModal = true, selected = true }, 500)"
+                            @mouseup="clearTimeout(timer)"
+                            @touchend="clearTimeout(timer)"
+                            :class="{
                         'shadow-lg': selected,
                         'grayscale': selected,
                         'bg-gray-100': selected,
@@ -18,19 +19,21 @@
                         'duration-300': true,
                         'ease-in-out': true
                         }"
-                        class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
-                        <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
-                                Complete
-                            </button>
-                        </form>
-                        <span>{{ task.title }}</span>
-                        <div x-cloak x-show="showEditModal">
-                            {% include 'todo/partials/edit_todo_task_modal.html' %}
-                        </div>
-                    </li>
+                            class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+                            <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}"
+                                  hx-target="#todos">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
+                                    Complete
+                                </button>
+                            </form>
+                            <span>{{ task.title }}</span>
+                            <div x-cloak x-show="selected">
+                                {% include 'todo/partials/edit_todo_task_modal.html' %}
+                            </div>
+                        </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
         </div>
@@ -38,17 +41,19 @@
 
     <div x-cloak x-show="activeTab === 'completed'">
         <ul class="list-disc list-inside mb-4">
-            {% for task in completed_status_list %}
-                <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
-                    <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white">
-                            Uncomplete
-                        </button>
-                    </form>
-                    <span>{{ task.title }}</span>
-                </li>
+            {% for task in todo_list_items %}
+                {% if task.status == "COMPLETE" %}
+                    <li class="flex justify-between border p-2 my-2 list-none dark:border-gray-600">
+                        <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}" hx-target="#todos">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white">
+                                Uncomplete
+                            </button>
+                        </form>
+                        <span>{{ task.title }}</span>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>

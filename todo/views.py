@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.http import QueryDict
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import FormView
@@ -54,22 +55,20 @@ def todo_task_list(request):
 def add_todo(request, list_id):
     text = request.POST.get('todo')
     todos = None
-    todo_added = False
     todo_list = None
+
     if text:
         user = request.user
         todo_list = get_object_or_404(ToDoList, id=list_id, user=user)
         todo_list.tasks.create(list=list_id, title=text)
         todos = todo_list.tasks.all()
-        todo_added = True
 
-    completed_status_list, todo_status_list = sort_todos(todos)
+    # sort by updated_at field in descending order
+    todos = todos.order_by('-sort_timestamp')
 
     context = {
-        'todo_status_list': todo_status_list,
-        'completed_status_list': completed_status_list,
+        'todo_list_items': todos,
         'todo_list': todo_list,
-        'list': 'todo_list'
     }
 
     return render(request, 'todo/partials/todo-tasks.html', context)
@@ -89,14 +88,11 @@ def toggle_todo(request, list_id, todo_id):
         todo.save()
 
     todos = todo_list.tasks.all()
-    todo_list = todo_list
-
-    completed_status_list, todo_status_list = sort_todos(todos)
+    todos = todos.order_by('-sort_timestamp')
 
     context = {
-        'todo_status_list': todo_status_list,
-        'completed_status_list': completed_status_list,
-        'todo_list': todo_list
+        'todo_list_items': todos,
+        'todo_list': todo_list,
     }
 
     return render(request, 'todo/partials/todo-tasks.html', context)
@@ -132,13 +128,52 @@ def todo_list_tasks(request, list_id):
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
     todos = todo_list.tasks.all()
 
-    completed_status_list, todo_status_list = sort_todos(todos)
+    # sort by updated_at field in descending order
+    todos = todos.order_by('-sort_timestamp')
 
     context = {
-        'todo_status_list': todo_status_list,
-        'completed_status_list': completed_status_list,
+        'todo_list_items': todos,
         'todo_list': todo_list,
-        'list': 'todo_list'
     }
 
     return render(request, 'todo/todo-list-tasks.html', context)
+
+
+@login_required
+def delete_todo(request, list_id, todo_id):
+    user = request.user
+    todo_list = user.todolists.get(id=list_id)
+    todo = todo_list.tasks.get(id=todo_id)
+
+    todo.delete()
+    todos = todo_list.tasks.all()
+
+    # sort by updated_at field in descending order
+    todos = todos.order_by('-sort_timestamp')
+
+    context = {
+        'todo_list_items': todos,
+        'todo_list': todo_list,
+    }
+
+    return render(request, 'todo/partials/todo-tasks.html', context)
+
+
+@login_required
+def edit_todo(request, list_id, todo_id):
+    data = QueryDict(request.body)
+    text = data.get('todo')
+
+    todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
+    todos = todo_list.tasks.all()
+    todo = todos.get(id=todo_id)
+
+    todo.title = text
+    todo.save(update_sort_timestamp=False)
+
+    context = {
+        'todo_list_items': todos,
+        'todo_list': todo_list,
+    }
+
+    return render(request, 'todo/partials/todo-tasks.html', context)

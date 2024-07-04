@@ -31,9 +31,17 @@ class ToDoTask(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=TODO)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    sort_timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        update_sort_timestamp = kwargs.pop('update_sort_timestamp', True)
+        if update_sort_timestamp:
+            self.sort_timestamp = self.updated_at
+
+        super(ToDoTask, self).save(*args, **kwargs)
+
     class Meta:
-        ordering = ['-updated_at']
+        ordering = ['-sort_timestamp']

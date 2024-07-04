@@ -1,25 +1,26 @@
 <div x-cloak id="edit-todo-modal"
-        {#     @click.away="showEditModal = false"#}
      class="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white p-4 rounded-lg shadow-lg max-w-xs mx-auto sm:m-4">
         <h2 class="text-xl font-bold mb-4">Edit To-do</h2>
-        <form class="flex justify-between flex-wrap" hx-post="{% url 'add_todo' todo_list.pk %}" hx-target="#todos"
-              hx-on--after-request="this.reset()">
-            {% csrf_token %}
+        <form class="flex justify-between flex-wrap" hx-on--after-request="this.reset()">
             <input name="todo" type="text" id="new-todo" class="border p-2 w-full mb-2" placeholder="Todo">
             <div class="flex-1 flex justify-between">
                 <div>
-                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded"
-                            @click="addTodoTaskDialogOpen = false; activeTab = 'todos'">
+                    <button class="px-4 py-2 bg-blue-500 text-white rounded"
+                            hx-put="{% url 'edit_todo' todo_list.pk task.pk %}" hx-target="#todos"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                            @click="selected=false">
                         Save
                     </button>
-                    <button type="button" id="close-modal" @click="addTodoTaskDialogOpen = false"
+                    <button type="button" id="close-modal"
+                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                            hx-delete="{% url 'delete_todo' todo_list.pk task.pk %}" hx-target="#todos"
+                            @click="selected=false"
                             class="px-4 py-2 bg-red-500 text-white rounded">
                         Delete
                     </button>
                 </div>
-                <button type="submit" class="px-4 py-2 bg-gray-500 text-white rounded"
-                        @click="addTodoTaskDialogOpen = false; activeTab = 'todos'">
+                <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded" @click="selected=false">
                     Close
                 </button>
             </div>
