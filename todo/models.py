@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import F
 
 
 class ToDoList(models.Model):
@@ -38,10 +39,11 @@ class ToDoTask(models.Model):
 
     def save(self, *args, **kwargs):
         update_sort_timestamp = kwargs.pop('update_sort_timestamp', True)
-        if update_sort_timestamp:
-            self.sort_timestamp = self.updated_at
 
+        # Call the superclass's save method first to update updated_at
         super(ToDoTask, self).save(*args, **kwargs)
 
-    class Meta:
-        ordering = ['-sort_timestamp']
+        if update_sort_timestamp:
+            # Directly update sort_timestamp in the database to match updated_at
+            # without triggering another save operation
+            ToDoTask.objects.filter(pk=self.pk).update(sort_timestamp=F('updated_at'))
