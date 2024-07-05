@@ -7,31 +7,33 @@
         </div>
         <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
             <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
-
                 {% if user.is_authenticated %}
                 {% csrf_token %}
                 <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-white no-underline" href="{% url 'todo_lists' %}">Todo
-                        Lists</a>
+                    <a class="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded no-underline"
+                       href="{% url 'todo_lists' %}">Todo Lists</a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block py-2 px-4 text-white no-underline" href="{% url 'profile' %}">Profile</a>
+                    <a class="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded no-underline"
+                       href="{% url 'profile' %}">Profile</a>
                 </li>
                 <li class="mr-3">
                     <form method="POST" action="{% url 'logout' %}">
                         {% csrf_token %}
-                        <button class="inline-block py-2 px-4 text-white no-underline" type="submit">Logout</button>
+                        <button class="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded no-underline"
+                                type="submit">Logout
+                        </button>
                     </form>
                 </li>
 
                 {% else %}
 
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
+                    <a class="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded no-underline"
                        href="{% url 'login' %}">Login</a>
                 </li>
                 <li class="mr-3">
-                    <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
+                    <a class="inline-block bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded no-underline"
                        href="{% url 'register' %}">Register</a>
                 </li>
                 {% endif %}

@@ -3,7 +3,7 @@
     <div class="bg-white p-4 rounded-lg shadow-lg max-w-xs mx-auto sm:m-4">
         <h2 class="text-xl font-bold mb-4">Edit To-do</h2>
         <form class="flex justify-between flex-wrap" hx-on--after-request="this.reset()">
-            <input name="todo" type="text" id="new-todo" class="border p-2 w-full mb-2" placeholder="Todo">
+            <input value="{{task.title}}" name="todo" type="text" id="new-todo" class="border p-2 w-full mb-2" placeholder="Todo">
             <div class="flex-1 flex justify-between">
                 <div>
                     <button class="px-4 py-2 bg-blue-500 text-white rounded"
