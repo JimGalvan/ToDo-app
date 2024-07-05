@@ -46,13 +46,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
+secret_dict = json.loads(secret)
+DJANGO_SECRET_KEY = secret_dict['DJANGO_SECRET_KEY']
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!%au**vihco8$w3ljg1xt0qt&6jtjw*flq6q@advha5i&_6cf4'
+SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+secret_dict = json.loads(secret)
+# Access values from the secret dictionary
+ALLOWED_HOST_AWS = secret_dict['ALLOWED_HOST']
+
+ALLOWED_HOSTS = [ALLOWED_HOST_AWS]
 
 # Application definition
 
