@@ -10,8 +10,35 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import json
 from pathlib import Path
-import dj_database_url
+
+import boto3
+from botocore.exceptions import ClientError
+
+secret_name = "todo-app-db-credentials"
+region_name = "us-east-1"
+
+# Create a Secrets Manager client
+session = boto3.session.Session()
+client = session.client(
+    service_name='secretsmanager',
+    region_name=region_name
+)
+
+try:
+    get_secret_value_response = client.get_secret_value(
+        SecretId=secret_name
+    )
+except ClientError as e:
+    # For a list of exceptions thrown, see
+    # https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
+    raise e
+
+secret = get_secret_value_response['SecretString']
+
+# Your code goes here.
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,14 +100,22 @@ WSGI_APPLICATION = 'todo_app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+secret_dict = json.loads(secret)
+# Access values from the secret dictionary
+db_user = secret_dict['USER']
+db_password = secret_dict['PASSWORD']
+db_host = secret_dict['HOST']
+db_name = secret_dict['NAME']
+db_port = secret_dict['PORT']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'todo_app',
-        'USER': 'jimmy',
-        'PASSWORD': '',
-        'HOST': 'localhost',  # Set to empty string for localhost.
-        'PORT': '5432',  # Set to empty string for default.
+        'NAME': db_name,
+        'USER': db_user,
+        'PASSWORD': db_password,
+        'HOST': db_host,  # Set to empty string for localhost.
+        'PORT': db_port,  # Set to empty string for default.
     }
 }
 
