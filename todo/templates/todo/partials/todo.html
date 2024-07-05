@@ -21,12 +21,12 @@
         {% csrf_token %}
         {% if task.status == "TODO" %}
             <button type="submit"
-                    class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white">
+                    class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white hover:dark:bg-blue-600 hover:bg-blue-600">
                 Complete
             </button>
         {% else %}
             <button type="submit"
-                    class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white">
+                    class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white hover:dark:bg-yellow-600 hover:bg-yellow-600">
                 Uncomplete
             </button>
         {% endif %}
