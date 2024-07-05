@@ -5,9 +5,9 @@
     <div x-cloak x-data="{ addTodoTaskDialogOpen : false, activeTab: 'todos' }">
 
         <div class="flex justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold mb-4">My Todo List</h1>
+            <h1 class="text-2xl font-bold mb-4">{{ todo_list.name }}</h1>
             <button @click="addTodoTaskDialogOpen = ! addTodoTaskDialogOpen" id="open-modal"
-                    class="px-4 py-2 bg-green-500 text-white hover:bg-green-400">
+                    class="px-4 py-2 bg-green-500 text-white hover:bg-green-400 whitespace-nowrap min-w-[100px] max-w-[200px]">
                 Add Todo
             </button>
         </div>
