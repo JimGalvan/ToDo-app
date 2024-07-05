@@ -53,7 +53,7 @@ DJANGO_SECRET_KEY = secret_dict['DJANGO_SECRET_KEY']
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Access values from the secret dictionary
 ALLOWED_HOST_AWS = secret_dict['ALLOWED_HOST']
