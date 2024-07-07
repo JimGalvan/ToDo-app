@@ -1,6 +1,6 @@
 <div id="todos">
     <div>
-        <div x-cloak x-show="activeTab === 'todos'">
+        <div x-show="activeTab === 'todos'">
             <ul class="list-disc list-inside mb-4">
                 {% for task in todo_list_items %}
                 {% if task.status == "TODO" %}
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <div x-cloak x-show="activeTab === 'completed'">
+    <div x-show="activeTab === 'completed'">
         <ul class="list-disc list-inside mb-4">
             {% for task in todo_list_items %}
             {% if task.status == "COMPLETE" %}
