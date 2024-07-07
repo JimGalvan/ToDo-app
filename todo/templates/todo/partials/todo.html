@@ -4,7 +4,7 @@
     @touchstart="timer = setTimeout(() => { selected = true }, 500)"
     @mouseup="clearTimeout(timer)"
     @touchend="clearTimeout(timer)"
-    class="flex justify-between border p-2 my-2 list-none dark:border-gray-600"
+    class="no-select flex justify-between border p-2 my-2 list-none dark:border-gray-600"
     :class="{
                             'shadow-lg': selected,
                             'grayscale': selected,
@@ -36,6 +36,6 @@
     </span>
 
     <div x-cloak x-show="selected" style="position: fixed;">
-        {% include 'todo/partials/edit_todo_task_modal.html' %}
+                {% include 'todo/partials/edit_todo_task_modal.html' %}
     </div>
 </li>
