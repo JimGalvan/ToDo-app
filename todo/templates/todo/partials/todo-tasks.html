@@ -1,7 +1,8 @@
 <div id="todos">
     <div>
         <div x-show="activeTab === 'todos'">
-            <ul class="list-disc list-inside mb-4">
+            <form class="sortable list-disc list-inside mb-4" hx-post="{% url 'sort' list_id=todo_list.pk %}"
+                  hx-trigger="end" hx-target="#todos">
                 {% for task in todo_list_items %}
                 {% if task.status == "TODO" %}
                 {% include 'todo/partials/todo.html' %}
@@ -9,12 +10,13 @@
                 {% empty %}
                 <span class="flex items-center justify-center text-gray-500 bg-gray-100 p-2 rounded">No tasks to do. Enjoy your day!</span>
                 {% endfor %}
-            </ul>
+            </form>
         </div>
     </div>
 
     <div x-show="activeTab === 'completed'">
-        <ul class="list-disc list-inside mb-4">
+        <form class="sortable list-disc list-inside mb-4" hx-post="{% url 'sort' list_id=todo_list.pk %}"
+                  hx-trigger="end" hx-target="#todos">
             {% for task in todo_list_items %}
             {% if task.status == "COMPLETE" %}
             {% include 'todo/partials/todo.html' %}
@@ -22,6 +24,6 @@
             {% empty %}
             <span class="flex items-center justify-center text-gray-500 bg-gray-100 p-2 rounded">No completed tasks yet.</span>
             {% endfor %}
-        </ul>
+        </form>
     </div>
 </div>

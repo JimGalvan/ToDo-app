@@ -10,6 +10,45 @@
     <script src="https://unpkg.com/htmx.org@2.0.0"
             integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
             crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script>
+        htmx.onLoad(function (content) {
+            var sortables = document.querySelectorAll(".sortable");
+            for (var i = 0; i < sortables.length; i++) {
+                var sortable = sortables[i];
+                var sortableInstance = new Sortable(sortable, {
+                    animation: 150,
+                    ghostClass: 'blue-background-class',
+
+                    // Make the `.htmx-indicator` unsortable
+                    filter: ".htmx-indicator",
+                    onMove: function (evt) {
+                        return evt.related.className.indexOf('htmx-indicator') === -1;
+                    },
+                });
+
+                // Re-enable sorting on the `htmx:afterSwap` event
+                sortable.addEventListener("htmx:afterSwap", function () {
+                    sortableInstance.option("disabled", false);
+                });
+            }
+        })
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Query all submit buttons within forms that have the 'hx-post' attribute
+            const submitButtons = document.querySelectorAll('form[hx-post] button[type="submit"]');
+
+            // Add event listeners to each button to stop propagation of mousedown and touchstart events
+            submitButtons.forEach(button => {
+                button.addEventListener('mousedown', function (event) {
+                    event.stopPropagation();
+                });
+                button.addEventListener('touchstart', function (event) {
+                    event.stopPropagation();
+                });
+            });
+        });
+    </script>
     <style>
         [x-cloak] {
             display: none;

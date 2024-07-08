@@ -66,8 +66,10 @@ def add_todo(request, list_id):
     # sort by updated_at field in descending order
     todos = todos.order_by('-sort_timestamp')
 
+    sorted_todos = sorted(todos, key=lambda x: x.order)
+
     context = {
-        'todo_list_items': todos,
+        'todo_list_items': sorted_todos,
         'todo_list': todo_list,
     }
 
@@ -90,11 +92,12 @@ def toggle_todo(request, list_id, todo_id):
     todos = todo_list.tasks.all()
     todos = todos.order_by('-sort_timestamp')
 
+    sorted_todos = sorted(todos, key=lambda x: x.order)
+
     context = {
-        'todo_list_items': todos,
+        'todo_list_items': sorted_todos,
         'todo_list': todo_list,
     }
-
     return render(request, 'todo/partials/todo-tasks.html', context)
 
 
@@ -116,7 +119,6 @@ class RegisterView(FormView):
 def profile_view(request):
     return render(request, 'user/profile.html')
 
-
 @login_required
 def todo_list_tasks(request, list_id):
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
@@ -125,8 +127,10 @@ def todo_list_tasks(request, list_id):
     # sort by updated_at field in descending order
     todos = todos.order_by('-sort_timestamp')
 
+    sorted_todos = sorted(todos, key=lambda x: x.order)
+
     context = {
-        'todo_list_items': todos,
+        'todo_list_items': sorted_todos,
         'todo_list': todo_list,
     }
 
@@ -145,8 +149,10 @@ def delete_todo(request, list_id, todo_id):
     # sort by updated_at field in descending order
     todos = todos.order_by('-sort_timestamp')
 
+    sorted_todos = sorted(todos, key=lambda x: x.order)
+
     context = {
-        'todo_list_items': todos,
+        'todo_list_items': sorted_todos,
         'todo_list': todo_list,
     }
 
@@ -168,8 +174,33 @@ def edit_todo(request, list_id, todo_id):
     # sort by updated_at field in descending order
     todos = todos.order_by('-sort_timestamp')
 
+    sorted_todos = sorted(todos, key=lambda x: x.order)
+
     context = {
-        'todo_list_items': todos,
+        'todo_list_items': sorted_todos,
+        'todo_list': todo_list,
+    }
+
+    return render(request, 'todo/partials/todo-tasks.html', context)
+
+
+def sort_todo_list(request, list_id):
+    todo_pks_order = request.POST.getlist('todo_order')
+    todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
+    todos = todo_list.tasks.all()
+    todos = todos.order_by('-sort_timestamp')
+    sorted_todos = []
+
+    for idx, todo_pk in enumerate(todo_pks_order, start=1):
+        todo = todos.get(pk=todo_pk)
+        todo.order = idx
+        todo.save()
+        sorted_todos.append(todo)
+
+    sorted_todos = sorted(sorted_todos, key=lambda x: x.order)
+
+    context = {
+        'todo_list_items': sorted_todos,
         'todo_list': todo_list,
     }
 

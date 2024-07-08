@@ -32,6 +32,7 @@ class ToDoTask(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=TODO)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    order = models.PositiveIntegerField(default=0)
     sort_timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

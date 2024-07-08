@@ -1,8 +1,11 @@
-<li x-data="{ timer: null, selected: false }"
+<div>
+    <input type='hidden' name='todo_order' value='{{ task.pk }}'/>
+    <div x-data="{ timer: null, selected: false }"
     @click.away="selected = false"
     @mousedown="timer = setTimeout(() => { selected = true }, 500)"
     @touchstart="timer = setTimeout(() => { selected = true }, 500)"
     @mouseup="clearTimeout(timer)"
+         @mouseup="selected = false"
     @touchend="clearTimeout(timer)"
     class="no-select flex justify-between border p-2 my-2 list-none dark:border-gray-600"
     :class="{
@@ -16,26 +19,27 @@
                             'display: block;': selected
                             }"
 >
-    <form hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}"
-          hx-target="#todos">
-        {% csrf_token %}
-        {% if task.status == "TODO" %}
-            <button type="submit"
-                    class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white hover:dark:bg-blue-600 hover:bg-blue-600">
-                Complete
-            </button>
-        {% else %}
-            <button type="submit"
-                    class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white hover:dark:bg-yellow-600 hover:bg-yellow-600">
-                Uncomplete
-            </button>
-        {% endif %}
-    </form>
-    <span class="px-2 overflow-hidden text-ellipsis break-all">
-        {{ task.title }}
-    </span>
+        <div hx-post="{% url 'toggle_todo' list_id=todo_list.pk todo_id=task.pk %}"
+             hx-target="#todos">
+            {% csrf_token %}
+            {% if task.status == "TODO" %}
+                <button type="button"
+                        class="px-2 py-1 ml-2 rounded dark:bg-blue-500 bg-blue-500 text-white hover:dark:bg-blue-600 hover:bg-blue-600">
+                    Complete
+                </button>
+            {% else %}
+                <button type="button"
+                        class="px-2 py-1 ml-2 rounded dark:bg-yellow-500 bg-yellow-500 text-white hover:dark:bg-yellow-600 hover:bg-yellow-600">
+                    Uncomplete
+                </button>
+            {% endif %}
+        </div>
+        <span class="px-2 overflow-hidden text-ellipsis break-all">
+            {{ task.title }}
+        </span>
 
-    <div x-cloak x-show="selected" style="position: fixed;">
-                {% include 'todo/partials/edit_todo_task_modal.html' %}
+        {#    <div x-cloak x-show="selected" style="position: fixed;">#}
+        {#                {% include 'todo/partials/edit_todo_task_modal.html' %}#}
+        {#    </div>#}
     </div>
-</li>
+</div>
