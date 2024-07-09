@@ -188,7 +188,7 @@ def sort_todo_list(request, list_id):
     todo_pks_order = request.POST.getlist('todo_order')
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
     todos = todo_list.tasks.all()
-    todos = todos.order_by('-sort_timestamp')
+
     sorted_todos = []
 
     for idx, todo_pk in enumerate(todo_pks_order, start=1):
@@ -197,11 +197,10 @@ def sort_todo_list(request, list_id):
         todo.save()
         sorted_todos.append(todo)
 
-    sorted_todos = sorted(sorted_todos, key=lambda x: x.order)
-
     context = {
         'todo_list_items': sorted_todos,
         'todo_list': todo_list,
     }
 
+    # Return the rendered template with the context
     return render(request, 'todo/partials/todo-tasks.html', context)

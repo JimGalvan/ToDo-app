@@ -33,21 +33,6 @@
                 });
             }
         })
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Query all submit buttons within forms that have the 'hx-post' attribute
-            const submitButtons = document.querySelectorAll('form[hx-post] button[type="submit"]');
-
-            // Add event listeners to each button to stop propagation of mousedown and touchstart events
-            submitButtons.forEach(button => {
-                button.addEventListener('mousedown', function (event) {
-                    event.stopPropagation();
-                });
-                button.addEventListener('touchstart', function (event) {
-                    event.stopPropagation();
-                });
-            });
-        });
     </script>
     <style>
         [x-cloak] {
