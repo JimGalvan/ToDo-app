@@ -1,5 +1,4 @@
-<div id="todos">
-    <form class="sortable list-disc list-inside mb-4" hx-post="{% url 'sort' list_id=todo_list.pk %}"
+<form id="todos" class="sortable list-disc list-inside mb-4" hx-post="{% url 'sort' list_id=todo_list.pk %}"
                   hx-trigger="end" hx-target="#todos">
                 {% for task in todo_list_items %}
                 {% if task.status == "TODO" %}
@@ -19,5 +18,4 @@
                 {% empty %}
             <span class="flex items-center justify-center text-gray-500 bg-gray-100 p-2 rounded">No completed tasks yet.</span>
                 {% endfor %}
-    </form>
-</div>
+</form>

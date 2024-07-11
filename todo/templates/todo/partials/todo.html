@@ -4,12 +4,17 @@
     <input type='hidden' name='todo_order' value='{{ task.pk }}'/>
     <div
             @click.away="selected = false"
-            @mousedown="timer = setTimeout(() => { selected = true }, 100)"
-            @touchstart="timer = setTimeout(() => { selected = true }, 100)"
-            @mouseup="clearTimeout(timer)"
-            @mouseup="selected = false"
-            @touchend="clearTimeout(timer)"
-            class="no-select flex justify-between border p-2 my-2 list-none dark:border-gray-600"
+            @mousedown="if (!scrolling) timer = setTimeout(() => { selected = true }, 600)"
+            @touchstart="if (!scrolling) timer = setTimeout(() => { selected = true }, 600)"
+            @mouseup="clearTimeout(timer); selected = false"
+            @touchend="clearTimeout(timer); selected = false"
+            @wheel="scrolling = true; clearTimeout(timer); selected = false"
+            @scroll="scrolling = true; clearTimeout(timer); selected = false"
+            x-init="scrolling = false"
+            x-data="{ timer: null, showEditModal: false, selected: false, scrolling: false }"
+            x-on:scroll.passive="scrolling = true"
+            x-on:wheel.passive="scrolling = true"
+            class="no-select flex justify-start border p-2 my-2 list-none dark:border-gray-600"
             :class="{
                                         'shadow-lg': selected,
                                         'grayscale': selected,
@@ -21,7 +26,7 @@
                                         'display: block;': selected
                                         }"
 >
-        <div>
+        <div class="flex-shrink-0">
             {% csrf_token %}
             {% if task.status == "TODO" %}
                 <button id="complete-todo" type="button"
@@ -64,7 +69,7 @@
                 </button>
             {% endif %}
         </div>
-        <span class="px-2 overflow-hidden text-ellipsis break-all">
+        <span class="px-2 overflow-hidden text-ellipsis">
             {{ task.title }}
         </span>
         <template x-if="showEditModal === true">
