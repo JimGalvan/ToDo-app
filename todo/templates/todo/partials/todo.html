@@ -11,7 +11,7 @@
             @wheel="scrolling = true; clearTimeout(timer); selected = false"
             @scroll="scrolling = true; clearTimeout(timer); selected = false"
             x-init="scrolling = false"
-            x-data="{ timer: null, showEditModal: false, selected: false, scrolling: false }"
+            x-data="{ scrolling: false }"
             x-on:scroll.passive="scrolling = true"
             x-on:wheel.passive="scrolling = true"
             class="no-select flex justify-start border p-2 my-2 list-none dark:border-gray-600"
@@ -72,7 +72,7 @@
         <span class="px-2 overflow-hidden text-ellipsis">
             {{ task.title }}
         </span>
-        <template x-if="showEditModal === true">
+        <template x-if="showEditModal">
             {% include 'todo/partials/edit_todo_task_modal.html' %}
         </template>
     </div>
