@@ -1,8 +1,4 @@
-{% extends 'base.html' %}
-
-{% block content %}
-
-    <div x-cloak x-data="{ addTodoTaskDialogOpen : false, activeTab: 'todos' }">
+<div x-cloak x-data="{ addTodoTaskDialogOpen : false, activeTab: 'todos' }">
 
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold mb-4">{{ todo_list.name }}</h1>
@@ -32,4 +28,4 @@
             {% include 'todo/partials/add_todo_task_modal.html' %}
         </div>
     </div>
-{% endblock %}
+</div>
