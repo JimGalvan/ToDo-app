@@ -17,7 +17,7 @@ def index(request):
 @login_required
 def todo_lists(request):
     items = request.user.todolists.all()
-    return render(request, 'todo/todo-lists.html', {'todo_lists': items})
+    return render(request, 'todo/user-todo-lists.html', {'todo_lists': items})
 
 
 @login_required
@@ -204,3 +204,17 @@ def sort_todo_list(request, list_id):
 
     # Return the rendered template with the context
     return render(request, 'todo/partials/todo-tasks.html', context)
+
+
+def delete_todo_list():
+    return None
+
+
+def edit_todo_list():
+    return None
+
+
+def add_todo_list(request):
+    ToDoList.objects.create(user=request.user, name=request.POST.get('list_name'))
+    todo_lists = ToDoList.objects.filter(user=request.user, is_hidden=False)
+    return render(request, 'todo/todo-lists-container.html', {'todo_lists': todo_lists})

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+    <div x-data="{ addListModalOpen: false }">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold mb-4">Your Todo Lists</h1>
+            <button @click="addListModalOpen = ! addListModalOpen" id="open-modal"
+                    class="rounded px-4 py-2 bg-gray-600 text-white hover:bg-gray-500 whitespace-nowrap min-w-[100px] max-w-[200px]">
+                Add List
+            </button>
+        </div>
+        {% include 'todo/todo-lists-container.html' %}
+        <div x-cloak x-show="addListModalOpen">
+            {% include 'todo/elements/modals/add_list_modal.html' %}
+        </div>
+    </div>
+{% endblock %}
