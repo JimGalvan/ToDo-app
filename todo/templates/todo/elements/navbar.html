@@ -5,7 +5,7 @@
     });
 </script>
 <div hx-boost="true">
-    <div x-data="{ open: false, isDesktop: window.innerWidth >= 768 }"
+    <div x-data="{ open: false, isDesktop: window.innerWidth >= 768, currentUrl: window.location.pathname }"
          x-init="$watch('isDesktop', value => { if (value) open = false; })">
         <nav class="bg-gray-800 p-3 mt-0 w-full">
             <div class="container mx-auto flex flex-wrap items-center justify-between">
@@ -58,9 +58,11 @@
                 </div>
                 <div class="hidden lg:flex lg:items-center lg:space-x-4">
                     {% if user.is_authenticated %}
-                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                        <a :class="currentUrl == '{% url 'todo_lists' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                           class="hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'todo_lists' %}">Todo Lists</a>
-                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                        <a :class="currentUrl == '{% url 'profile' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                           class="hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'profile' %}">Profile</a>
                         <form method="POST" action="{% url 'logout' %}" class="inline">
                             {% csrf_token %}
@@ -69,9 +71,11 @@
                             </button>
                         </form>
                     {% else %}
-                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                        <a :class="currentUrl == '{% url 'login' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                           class="hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'login' %}">Login</a>
-                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                        <a :class="currentUrl == '{% url 'register' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                           class="hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'register' %}">Register</a>
                     {% endif %}
                 </div>
@@ -96,11 +100,13 @@
                 <ul class="mt-12 space-y-1">
                     {% if user.is_authenticated %}
                         <li class="px-4 py-2">
-                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                            <a :class="currentUrl == '{% url 'todo_lists' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                               class="block hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                                href="{% url 'todo_lists' %}">Todo Lists</a>
                         </li>
                         <li class="px-4 py-2">
-                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                            <a :class="currentUrl == '{% url 'profile' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                               class="block hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                                href="{% url 'profile' %}">Profile</a>
                         </li>
                         <li class="px-4 py-2">
@@ -113,11 +119,13 @@
                         </li>
                     {% else %}
                         <li class="px-4 py-2">
-                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                            <a :class="currentUrl == '{% url 'login' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                               class="block hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                                href="{% url 'login' %}">Login</a>
                         </li>
                         <li class="px-4 py-2">
-                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                            <a :class="currentUrl == '{% url 'register' %}' ? 'bg-blue-500' : 'bg-gray-700'"
+                               class="block hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                                href="{% url 'register' %}">Register</a>
                         </li>
                     {% endif %}
