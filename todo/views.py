@@ -184,7 +184,7 @@ def edit_todo(request, list_id, todo_id):
 
     return render(request, 'todo/partials/todo-tasks.html', context)
 
-
+@login_required
 def sort_todo_list(request, list_id):
     todo_pks_order = request.POST.getlist('todo_order')
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
@@ -206,7 +206,7 @@ def sort_todo_list(request, list_id):
     # Return the rendered template with the context
     return render(request, 'todo/partials/todo-tasks.html', context)
 
-
+@login_required
 def delete_todo_list(request, list_id):
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
     todo_list.is_hidden = True
@@ -227,7 +227,7 @@ def edit_todo_list(request, list_id):
     todo_lists = ToDoList.objects.filter(user=request.user, is_hidden=False)
     return render(request, 'todo/todo-lists-list.html', {'todo_lists': todo_lists})
 
-
+@login_required
 def add_todo_list(request):
     ToDoList.objects.create(user=request.user, name=request.POST.get('list_name'))
     todo_lists = ToDoList.objects.filter(user=request.user, is_hidden=False)
