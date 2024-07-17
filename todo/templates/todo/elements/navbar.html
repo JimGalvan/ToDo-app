@@ -1,70 +1,128 @@
 {% load static %}
+<script>
+    window.addEventListener('resize', () => {
+        Alpine.store('isDesktop', window.innerWidth >= 768);
+    });
+</script>
 <div hx-boost="true">
-<div x-data="{ open: false }">
-    <nav class="bg-gray-800 p-3 mt-0 w-full">
-        <div class="container mx-auto flex flex-wrap items-center justify-between">
-            <div class="flex items-center text-white font-extrabold">
-                <a class="flex text-white no-underline hover:text-white hover:no-underline" href="/todo-lists/">
-                    <div class="logo"><style>.logo{display:flex;align-items:center}.checkmark{width:24px;height:24px;border:3px solid #4caf50;border-radius:4px;position:relative;margin-right:2px}.checkmark::after{content:'';position:absolute;width:10px;height:5px;border-left:3px solid #4caf50;border-bottom:3px solid #4caf50;transform:rotate(-45deg);top:5px;left:5px}.text{font-size:24px;color:#333}</style><div class="checkmark"></div></div>
-                    <span class="text-2xl pl-2"><i class="em em-grinning"></i>TaskNest</span>
-                </a>
-            </div>
-            <div>
-                <button @click="open = !open"
-                        class="flex items-center px-3 py-2 border rounded text-white border-gray-600 hover:text-white hover:border-white">
-                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Menu</title>
-                        <path d="M0 3h20v2H0zM0 7h20v2H0zM0 11h20v2H0z"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <div x-data="{ open: false, isDesktop: window.innerWidth >= 768 }"
+         x-init="$watch('isDesktop', value => { if (value) open = false; })">
+        <nav class="bg-gray-800 p-3 mt-0 w-full">
+            <div class="container mx-auto flex flex-wrap items-center justify-between">
+                <div class="flex items-center text-white font-extrabold">
+                    <a class="flex text-white no-underline hover:text-white hover:no-underline" href="/todo-lists/">
+                        <div class="logo">
+                            <style>.logo {
+                                display: flex;
+                                align-items: center
+                            }
 
-    <div x-cloak x-show="open" @click.away="open = false"
-         class="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
-        <div x-show="open" x-transition:enter="transition transform duration-300 ease-in-out"
-             x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
-             x-transition:leave="transition transform duration-300 ease-in-out"
-             x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
-             class="fixed right-0 top-0 h-full w-64 bg-gray-800 text-white shadow-xl z-50">
-            <button @click="open = false" class="absolute top-0 right-0 mt-4 mr-4 text-white">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="h-6 w-6 hover:text-gray-400 transition duration-150 ease-in-out" fill="none"
-                     viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-            <ul class="mt-12 space-y-1">
-                {% if user.is_authenticated %}
-                    <li class="px-4 py-2">
-                        <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                            .checkmark {
+                                width: 24px;
+                                height: 24px;
+                                border: 3px solid #4caf50;
+                                border-radius: 4px;
+                                position: relative;
+                                margin-right: 2px
+                            }
+
+                            .checkmark::after {
+                                content: '';
+                                position: absolute;
+                                width: 10px;
+                                height: 5px;
+                                border-left: 3px solid #4caf50;
+                                border-bottom: 3px solid #4caf50;
+                                transform: rotate(-45deg);
+                                top: 5px;
+                                left: 5px
+                            }
+
+                            .text {
+                                font-size: 24px;
+                                color: #333
+                            }</style>
+                            <div class="checkmark"></div>
+                        </div>
+                        <span class="text-2xl pl-2"><i class="em em-grinning"></i>TaskNest</span>
+                    </a>
+                </div>
+                <div class="block lg:hidden">
+                    <button @click="open = !open"
+                            class="flex items-center px-3 py-2 border rounded text-white border-gray-600 hover:text-white hover:border-white">
+                        <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <title>Menu</title>
+                            <path d="M0 3h20v2H0zM0 7h20v2H0zM0 11h20v2H0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="hidden lg:flex lg:items-center lg:space-x-4">
+                    {% if user.is_authenticated %}
+                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'todo_lists' %}">Todo Lists</a>
-                    </li>
-                    <li class="px-4 py-2">
-                        <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'profile' %}">Profile</a>
-                    </li>
-                    <li class="px-4 py-2">
-                        <form method="POST" action="{% url 'logout' %}">
+                        <form method="POST" action="{% url 'logout' %}" class="inline">
                             {% csrf_token %}
-                            <button class="block bg-gray-900 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                            <button class="bg-gray-900 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                                     type="submit">Logout
                             </button>
                         </form>
-                    </li>
-                {% else %}
-                    <li class="px-4 py-2">
-                        <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                    {% else %}
+                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="px-4 py-2">
-                        <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                        <a class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
                            href="{% url 'register' %}">Register</a>
-                    </li>
-                {% endif %}
-            </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        <div x-cloak x-show="open && !isDesktop" @click.away="open = false"
+             class="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300">
+            <div x-show="open && !isDesktop" x-transition:enter="transition transform duration-300 ease-in-out"
+                 x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transition transform duration-300 ease-in-out"
+                 x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full"
+                 class="fixed right-0 top-0 h-full w-64 bg-gray-800 text-white shadow-xl z-50">
+                <button @click="open = false" class="absolute top-0 right-0 mt-4 mr-4 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         class="h-6 w-6 hover:text-gray-400 transition duration-150 ease-in-out" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <ul class="mt-12 space-y-1">
+                    {% if user.is_authenticated %}
+                        <li class="px-4 py-2">
+                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                               href="{% url 'todo_lists' %}">Todo Lists</a>
+                        </li>
+                        <li class="px-4 py-2">
+                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                               href="{% url 'profile' %}">Profile</a>
+                        </li>
+                        <li class="px-4 py-2">
+                            <form method="POST" action="{% url 'logout' %}">
+                                {% csrf_token %}
+                                <button class="block bg-gray-900 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                                        type="submit">Logout
+                                </button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="px-4 py-2">
+                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                               href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="px-4 py-2">
+                            <a class="block bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded no-underline transition duration-150 ease-in-out"
+                               href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 </div>
