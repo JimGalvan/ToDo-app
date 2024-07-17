@@ -17,7 +17,7 @@ def index(request):
 @login_required
 def todo_lists(request):
     items = request.user.todolists.all()
-    return render(request, 'todo/user-todo-lists.html', {'todo_lists': items})
+    return render(request, 'todo/todo-lists.html', {'todo_lists': items})
 
 
 @login_required
@@ -119,6 +119,7 @@ class RegisterView(FormView):
 def profile_view(request):
     return render(request, 'user/profile.html')
 
+
 @login_required
 def todo_list_tasks(request, list_id):
     todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
@@ -206,15 +207,28 @@ def sort_todo_list(request, list_id):
     return render(request, 'todo/partials/todo-tasks.html', context)
 
 
-def delete_todo_list():
-    return None
+def delete_todo_list(request, list_id):
+    todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
+    todo_list.is_hidden = True
+    todo_list.delete()
+    todo_lists = ToDoList.objects.filter(user=request.user, is_hidden=False)
+    return render(request, 'todo/todo-lists-list.html', {'todo_lists': todo_lists})
 
 
-def edit_todo_list():
-    return None
+@login_required
+def edit_todo_list(request, list_id):
+    data = QueryDict(request.body)
+    text = data.get('name')
+
+    todo_list = get_object_or_404(ToDoList, id=list_id, user=request.user)
+    todo_list.name = text
+    todo_list.save()
+
+    todo_lists = ToDoList.objects.filter(user=request.user, is_hidden=False)
+    return render(request, 'todo/todo-lists-list.html', {'todo_lists': todo_lists})
 
 
 def add_todo_list(request):
     ToDoList.objects.create(user=request.user, name=request.POST.get('list_name'))
     todo_lists = ToDoList.objects.filter(user=request.user, is_hidden=False)
-    return render(request, 'todo/todo-lists-container.html', {'todo_lists': todo_lists})
+    return render(request, 'todo/todo-lists-list.html', {'todo_lists': todo_lists})
