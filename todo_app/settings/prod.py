@@ -32,8 +32,8 @@ DJANGO_SECRET_KEY = secret_dict['DJANGO_SECRET_KEY']
 SECRET_KEY = DJANGO_SECRET_KEY
 
 ALLOWED_HOST_AWS = secret_dict['ALLOWED_HOST']
-
 ALLOWED_HOSTS = [ALLOWED_HOST_AWS]
+ALLOWED_HOSTS += ['tasklull.com', 'www.tasklull.com']
 
 secret_dict = json.loads(secret)
 # Access values from the secret dictionary
